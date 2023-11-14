@@ -1,12 +1,5 @@
-#include <iostream>
-#include <fstream>
-#include <ostream>
-
-#include "cpp-core/core.h"
+//
+// Created by WolfPlay on 11/14/2023.
+//
 
 #include "bin_generator.h"
-
-
-int main(int argc, char* argv[]) {
-
-}

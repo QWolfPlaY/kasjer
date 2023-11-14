@@ -11,7 +11,7 @@ if (EXT_BUILD_DIR)
     else ()
         message(FATAL_ERROR "Unknown build type: ${CMAKE_BUILD_TYPE}")
     endif ()
-endif()
+endif ()
 
 set(CMAKE_CXX_STANDARD 23)
 #set(CMAKE_TRY_COMPILE_TARGET_TYPE "EXECUTABLE")
@@ -28,7 +28,9 @@ target_link_libraries(kasjer PRIVATE
         core
 )
 
-add_executable(bin_generator src/bin_generator/bin_generator.cpp src/bin_generator/bin_generator.h)
+add_executable(bin_generator
+        src/bin_generator/bin_generator.cpp
+        src/bin_generator/bin_generator.h)
 
 target_include_directories(bin_generator PRIVATE
         ${CMAKE_SOURCE_DIR}/include
