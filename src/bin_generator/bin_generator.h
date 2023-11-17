@@ -12,7 +12,6 @@ public:
         unsigned int customerCount;
         unsigned int workTime;
         unsigned int cigaretteBreakLen;
-        unsigned char byteData[12] = {};
     } header;
     typedef struct {
         unsigned int entryTime;
@@ -20,9 +19,8 @@ public:
     } customer;
 
     static header generateHeader();
-    static customer generateCustomer();
-
-    static char* data();
+    static customer generateCustomer(header headerRawData);
+    static char* generateByteData(header headerRawData);
 };
 
 
