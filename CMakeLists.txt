@@ -16,7 +16,8 @@ endif ()
 set(CMAKE_CXX_STANDARD 23)
 #set(CMAKE_TRY_COMPILE_TARGET_TYPE "EXECUTABLE")
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/include/cpp-core)
+add_subdirectory(include/cpp-core)
+add_subdirectory(include/spdlog)
 
 add_executable(kasjer src/main.cpp)
 
@@ -26,6 +27,7 @@ target_include_directories(kasjer PRIVATE
 
 target_link_libraries(kasjer PRIVATE
         core
+        spdlog
 )
 
 add_executable(bin_generator
@@ -38,4 +40,5 @@ target_include_directories(bin_generator PRIVATE
 
 target_link_libraries(bin_generator PRIVATE
         core
+        spdlog
 )
