@@ -1,3 +1,6 @@
 [submodule "include/cpp-core"]
 	path = include/cpp-core
 	url = https://github.com/QWolfPlaY/cpp-core
+[submodule "include/spdlog"]
+	path = include/spdlog
+	url = https://github.com/gabime/spdlog.git
