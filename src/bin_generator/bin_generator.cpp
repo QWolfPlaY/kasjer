@@ -33,27 +33,49 @@ bin_generator::customer bin_generator::generateCustomer(bin_generator::header he
 }
 
 char *bin_generator::generateByteData(bin_generator::header headerRawData) {
-    std::vector<bin_generator::customer> customers;
-    std::vector<char> byteData;
-
     char *headerBytes = core::toBytes(headerRawData);
-    byteData.reserve(sizeof(&headerBytes));
-    
-    for (int i = 0; i < sizeof(&headerBytes); i++) {
-        byteData.push_back(headerBytes[i]);
+
+    size_t dataSize = sizeof(headerBytes) + (headerRawData.customerCount * sizeof(bin_generator::customer));
+    char *byteData = new char[dataSize]; // ! DON'T FORGET TO FREE THE MEMORY
+
+    std::vector<bin_generator::customer> customers;
+
+    unsigned long long int index;
+
+    for (index = 0; index < sizeof(*headerBytes); index++) {
+        byteData[index] = headerBytes[index];
     }
 
+    customers.reserve(headerRawData.customerCount * sizeof(bin_generator::customer));
     for (int i = 0; i < headerRawData.customerCount; i++) {
         customers.push_back(generateCustomer(headerRawData));
     }
 
+    std::vector<char> customersBytesVec;
+    customersBytesVec.reserve(customers.size() * sizeof(customer));
+    for (const auto &element: customers) {
+        char *customerBytes = core::toBytes(element);
+        for (int i = 0; i < sizeof(customerBytes); i++) {
+            customersBytesVec.push_back(customerBytes[i]);
+        }
+    }
 
-    return 0;
+    for (char byte : customersBytesVec) {
+        byteData[index] = byte;
+        index++;
+    }
+
+    return byteData;
 }
 
+#ifdef EXEC
+#include <iostream>
+#include "spdlog/spdlog.h"
 
 int main(int argc, char *argv[]) {
-
-
+    if (!core::checkArgs(argc, argv)) {
+        spdlog::critical("Not enough arguments provided!");
+    }
     return 0;
 }
+#endif
