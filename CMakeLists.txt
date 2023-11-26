@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 project(kasjer)
 
-option(EXT_BUILD_DIR "Output build result to diffrent directory" OFF)
+option(EXT_BUILD_DIR "Output build result to different directory" OFF)
 
 if (EXT_BUILD_DIR)
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
