@@ -5,7 +5,6 @@
 #ifndef KASJER_BIN_GENERATOR_H
 #define KASJER_BIN_GENERATOR_H
 
-
 class bin_generator {
 public:
     typedef struct {
@@ -20,6 +19,7 @@ public:
 
     static header generateHeader();
     static customer generateCustomer(header headerRawData);
+    static size_t calculateSize(header headerRawData);
     static char* generateByteData(header headerRawData);
 };
 
