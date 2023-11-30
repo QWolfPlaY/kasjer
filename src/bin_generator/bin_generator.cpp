@@ -10,9 +10,9 @@ bin_generator::header bin_generator::generateHeader() {
 
     bin_generator::header headerRawData = {};
 
-    headerRawData.customerCount = std::uniform_int_distribution<unsigned int>(1, 100000)(rd);
-    headerRawData.workTime = std::uniform_int_distribution<unsigned int>(1, 1000000000)(rd);
-    headerRawData.cigaretteBreakLen = std::uniform_int_distribution<unsigned int>(1, headerRawData.workTime)(rd);
+    headerRawData.customerCount = std::uniform_int_distribution<unsigned int>(1, 100000)(gen);
+    headerRawData.workTime = std::uniform_int_distribution<unsigned int>(1, 1000000000)(gen);
+    headerRawData.cigaretteBreakLen = std::uniform_int_distribution<unsigned int>(1, headerRawData.workTime)(gen);
 
     return headerRawData;
 }
