@@ -34,39 +34,27 @@ bin_generator::customer bin_generator::generateCustomer(bin_generator::header he
 
 char *bin_generator::generateByteData(bin_generator::header headerRawData) {
     char *headerBytes = core::toBytes(&headerRawData);
+    size_t headerSize = sizeof(bin_generator::header);
 
-    size_t dataSize = sizeof(headerBytes) + (headerRawData.customerCount * sizeof(bin_generator::customer));
+    size_t dataSize = headerSize + (headerRawData.customerCount * sizeof(bin_generator::customer));
     char *byteData = new char[dataSize]; // ! DON'T FORGET TO FREE THE MEMORY
 
-    std::vector<bin_generator::customer> customers;
-
-    size_t index;
-
-    for (index = 0; index < sizeof(headerBytes); index++) {
-        byteData[index] = headerBytes[index];
-    }
-
-    customers.reserve(headerRawData.customerCount * sizeof(bin_generator::customer));
-    for (int i = 0; i < headerRawData.customerCount; i++) {
-        customers.push_back(generateCustomer(headerRawData));
-    }
-
-    std::vector<char> customersBytesVec;
-    customersBytesVec.reserve(customers.size() * sizeof(customer));
-    for (const auto &element: customers) {
-        char *customerBytes = core::toBytes(&element);
-        for (size_t i = 0; i < sizeof(*customerBytes); i++) {
-            customersBytesVec.push_back(customerBytes[i]);
-        }
-        delete[] customerBytes;
-    }
-
-    for (char byte: customersBytesVec) {
-        byteData[index] = byte;
-        index++;
-    }
+    memcpy(byteData, headerBytes, headerSize);
 
     delete[] headerBytes;
+
+    size_t index = headerSize;
+
+    for (int i = 0; i < headerRawData.customerCount; i++) {
+        bin_generator::customer customerData = generateCustomer(headerRawData);
+        char* customerBytes = core::toBytes(&customerData);
+        size_t customerSize = sizeof(bin_generator::customer);
+
+        memcpy(byteData + index, customerBytes, customerSize);
+
+        delete[] customerBytes;
+        index += customerSize;
+    }
 
     return byteData;
 }
