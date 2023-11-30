@@ -33,7 +33,7 @@ bin_generator::customer bin_generator::generateCustomer(bin_generator::header he
 }
 
 char *bin_generator::generateByteData(bin_generator::header headerRawData) {
-    char *headerBytes = core::toBytes(headerRawData);
+    char *headerBytes = core::toBytes(&headerRawData);
 
     size_t dataSize = sizeof(headerBytes) + (headerRawData.customerCount * sizeof(bin_generator::customer));
     char *byteData = new char[dataSize]; // ! DON'T FORGET TO FREE THE MEMORY
@@ -54,7 +54,7 @@ char *bin_generator::generateByteData(bin_generator::header headerRawData) {
     std::vector<char> customersBytesVec;
     customersBytesVec.reserve(customers.size() * sizeof(customer));
     for (const auto &element: customers) {
-        char *customerBytes = core::toBytes(element);
+        char *customerBytes = core::toBytes(&element);
         for (size_t i = 0; i < sizeof(*customerBytes); i++) {
             customersBytesVec.push_back(customerBytes[i]);
         }
