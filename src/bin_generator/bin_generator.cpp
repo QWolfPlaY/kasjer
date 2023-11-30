@@ -33,7 +33,7 @@ bin_generator::customer bin_generator::generateCustomer(bin_generator::header he
 }
 
 char *bin_generator::generateByteData(bin_generator::header headerRawData) {
-    char *headerBytes = core::toBytes(&headerRawData);
+    char *headerBytes = core::toBytes(&headerRawData, sizeof(bin_generator::header));
     size_t headerSize = sizeof(bin_generator::header);
 
     size_t dataSize = headerSize + (headerRawData.customerCount * sizeof(bin_generator::customer));
@@ -47,7 +47,7 @@ char *bin_generator::generateByteData(bin_generator::header headerRawData) {
 
     for (int i = 0; i < headerRawData.customerCount; i++) {
         bin_generator::customer customerData = generateCustomer(headerRawData);
-        char* customerBytes = core::toBytes(&customerData);
+        char* customerBytes = core::toBytes(&customerData, sizeof(bin_generator::customer));
         size_t customerSize = sizeof(bin_generator::customer);
 
         memcpy(byteData + index, customerBytes, customerSize);
