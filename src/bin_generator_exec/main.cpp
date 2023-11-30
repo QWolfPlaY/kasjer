@@ -8,6 +8,7 @@
 #include "spdlog/spdlog.h"
 #include "bin_generator.h"
 
+
 int main(int argc, char *argv[]) {
 #ifdef LOGGING_LEVEL
     spdlog::set_level(LOGGING_LEVEL);
@@ -25,9 +26,9 @@ int main(int argc, char *argv[]) {
     auto start = std::chrono::high_resolution_clock::now();
     char* binaryData = bin_generator::generateByteData(header);
     auto end = std::chrono::high_resolution_clock::now();
-    auto execTime = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
-    spdlog::debug("Took " + std::to_string(execTime.count()) + "ns");
-    spdlog::debug("Average: " + std::to_string(execTime.count() / header.customerCount) + " ns/customer");
+    auto execTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    spdlog::debug("Took " + std::to_string(execTime.count()) + "ms");
+    spdlog::debug("Average: " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(execTime).count() / header.customerCount) + " us/customer");
 
     std::filesystem::path dirPath = "./data/";
 
@@ -54,7 +55,7 @@ int main(int argc, char *argv[]) {
         fileNum++;
     } while(std::filesystem::exists(filePath));
 
-    spdlog::debug("Found free filename: data" + std::to_string(fileNum) + ".bin");
+    spdlog::debug("Found free filename: data" + std::to_string(--fileNum) + ".bin");
     spdlog::debug("Opening file for writing");
     std::ofstream outFile(filePath, std::ios::binary);
     if (!outFile) {
@@ -68,15 +69,15 @@ int main(int argc, char *argv[]) {
     std::mutex fileMutex;
 
     spdlog::debug("Locking file mutex");
-    std::unique_lock<std::mutex> lock(fileMutex);
+    std::lock_guard<std::mutex> lock(fileMutex);
 
     spdlog::debug("Writing binary data to file...");
     auto writeStart = std::chrono::high_resolution_clock::now();
-    outFile.write(binaryData, sizeof(binaryData));
+    outFile.write(binaryData, static_cast<std::streamsize>(bin_generator::calculateSize(header)));
     auto writeEnd = std::chrono::high_resolution_clock::now();
     spdlog::debug("Done writing to file");
     auto writeTime = std::chrono::duration_cast<std::chrono::microseconds>(writeEnd - writeStart);
-    spdlog::debug("Took: " + std::to_string(writeTime.count()) + "µs");
+    spdlog::debug("Took: " + std::to_string(writeTime.count()) + "us");
 
     outFile.close();
     spdlog::debug("Closed file");
