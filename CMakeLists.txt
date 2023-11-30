@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.26)
 project(kasjer)
 
 option(EXT_BUILD_DIR "Output build result to different directory" OFF)
-option(BIN_GENERATOR_EXEC "Creates executable from bin_generator instead of library" ON)
+#option(BIN_GENERATOR_EXEC "Creates executable from bin_generator instead of library" ON)
 
 add_compile_definitions(
         LOGGING_LEVEL=spdlog::level::debug
@@ -22,6 +22,7 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_subdirectory(include/cpp-core)
 add_subdirectory(include/spdlog)
+add_subdirectory(src/bin_generator)
 
 add_executable(kasjer src/main.cpp)
 
@@ -34,37 +35,21 @@ target_link_libraries(kasjer PRIVATE
         spdlog
 )
 
-add_library(bin_generator
-        src/bin_generator/bin_generator.cpp
-        src/bin_generator/bin_generator.h
-)
-
-target_include_directories(bin_generator PRIVATE
-        include
-)
-
-target_link_libraries(bin_generator PRIVATE
-        core
-        spdlog
-)
-
 add_executable(bin_generator_exec
-        src/bin_generator/exec/main.cpp
-        src/bin_generator/bin_generator.cpp
-        src/bin_generator/bin_generator.h
+        src/bin_generator_exec/main.cpp
         include/cpp-core/core.cpp
-        include/cpp-core/core.h
+        src/bin_generator/bin_generator.cpp
 )
 
-target_include_directories(bin_generator_exec PRIVATE
+target_include_directories(bin_generator_exec PUBLIC
         include
         src/bin_generator
 )
 
-target_link_libraries(bin_generator_exec PRIVATE
+target_link_libraries(bin_generator_exec PUBLIC
         core
-        spdlog
         bin_generator
+        spdlog
 )
 
 target_compile_definitions(bin_generator_exec PRIVATE LOGGING_LEVEL=spdlog::level::debug)
