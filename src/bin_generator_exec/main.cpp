@@ -78,9 +78,14 @@ int main(int argc, char *argv[]) {
     spdlog::debug("Done writing to file");
     auto writeTime = std::chrono::duration_cast<std::chrono::microseconds>(writeEnd - writeStart);
     spdlog::debug("Took: " + std::to_string(writeTime.count()) + "us");
-
     outFile.close();
     spdlog::debug("Closed file");
+
+    spdlog::info("Freeing the memory");
+    delete[] header;
+    spdlog::debug("Freed header[]\nSize: " + std::to_string(sizeof(bin_generator::header)));
+    delete[] binaryData;
+    spdlog::debug("Freed binaryData[]\nSize: " + );
     spdlog::info("Done :)");
 
     return 0;
