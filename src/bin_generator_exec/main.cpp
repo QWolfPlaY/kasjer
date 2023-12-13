@@ -8,8 +8,8 @@
 #include "spdlog/spdlog.h"
 #include "bin_generator.h"
 
-
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 #ifdef LOGGING_LEVEL
     spdlog::set_level(LOGGING_LEVEL);
 #else
@@ -24,11 +24,13 @@ int main(int argc, char *argv[]) {
 
     spdlog::info("Generating binary data...");
     auto start = std::chrono::high_resolution_clock::now();
-    char* binaryData = bin_generator::generateByteData(header);
+    char *binaryData = bin_generator::generateByteData(header);
     auto end = std::chrono::high_resolution_clock::now();
     auto execTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
     spdlog::debug("Took " + std::to_string(execTime.count()) + "ms");
-    spdlog::debug("Average: " + std::to_string(std::chrono::duration_cast<std::chrono::microseconds>(execTime).count() / header.customerCount) + " us/customer");
+    spdlog::debug("Average: " + std::to_string(
+            std::chrono::duration_cast<std::chrono::microseconds>(execTime).count() / header.customerCount) +
+                  " us/customer");
 
     std::filesystem::path dirPath = "./data/";
 
@@ -46,14 +48,13 @@ int main(int argc, char *argv[]) {
         spdlog::debug("Folder already exists");
     }
 
-
     spdlog::debug("Finding free filename...");
     unsigned short fileNum = 0;
     std::filesystem::path filePath;
     do {
         filePath = "./data/data" + std::to_string(fileNum) + ".bin";
         fileNum++;
-    } while(std::filesystem::exists(filePath));
+    } while (std::filesystem::exists(filePath));
 
     spdlog::debug("Found free filename: data" + std::to_string(--fileNum) + ".bin");
     spdlog::debug("Opening file for writing");
@@ -82,10 +83,8 @@ int main(int argc, char *argv[]) {
     spdlog::debug("Closed file");
 
     spdlog::info("Freeing the memory");
-    delete[] header;
-    spdlog::debug("Freed header[]\nSize: " + std::to_string(sizeof(bin_generator::header)));
     delete[] binaryData;
-    spdlog::debug("Freed binaryData[]\nSize: " + );
+    spdlog::debug("Freed binaryData[] | Size: " + std::to_string(bin_generator::CUSTOMER_SIZE * header.customerCount) + "B");
     spdlog::info("Done :)");
 
     return 0;

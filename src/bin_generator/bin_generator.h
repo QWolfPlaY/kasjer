@@ -5,14 +5,17 @@
 #ifndef KASJER_BIN_GENERATOR_H
 #define KASJER_BIN_GENERATOR_H
 
-class bin_generator {
+class bin_generator
+{
 public:
-    typedef struct {
+    typedef struct
+    {
         unsigned int customerCount;
         unsigned int workTime;
         unsigned int cigaretteBreakLen;
     } header;
-    typedef struct {
+    typedef struct
+    {
         unsigned int entryTime;
         unsigned int timeUsage;
     } customer;
@@ -23,7 +26,7 @@ public:
     static header generateHeader();
     static customer generateCustomer(header headerRawData);
     static size_t calculateSize(header headerRawData);
-    static char* generateByteData(header headerRawData);
+    static char *generateByteData(header headerRawData);
 };
 
 
