@@ -17,6 +17,9 @@ public:
         unsigned int timeUsage;
     } customer;
 
+    static const size_t HEADER_SIZE = sizeof(header);
+    static const size_t CUSTOMER_SIZE = sizeof(customer);
+
     static header generateHeader();
     static customer generateCustomer(header headerRawData);
     static size_t calculateSize(header headerRawData);

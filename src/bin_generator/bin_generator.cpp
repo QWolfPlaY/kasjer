@@ -33,33 +33,31 @@ bin_generator::customer bin_generator::generateCustomer(bin_generator::header he
 }
 
 char *bin_generator::generateByteData(bin_generator::header headerRawData) {
-    char *headerBytes = core::toBytes(&headerRawData, sizeof(bin_generator::header));
-    size_t headerSize = sizeof(bin_generator::header);
+    char *headerBytes = core::toBytes(&headerRawData, bin_generator::HEADER_SIZE);
 
-    size_t dataSize = headerSize + (headerRawData.customerCount * sizeof(bin_generator::customer));
+    size_t dataSize = bin_generator::HEADER_SIZE + (headerRawData.customerCount * bin_generator::CUSTOMER_SIZE);
     char *byteData = new char[dataSize]; // ! DON'T FORGET TO FREE THE MEMORY
 
-    memcpy(byteData, headerBytes, headerSize);
+    memcpy(byteData, headerBytes, bin_generator::HEADER_SIZE);
 
     delete[] headerBytes;
 
-    size_t index = headerSize;
+    size_t index = bin_generator::HEADER_SIZE;
 
     for (int i = 0; i < headerRawData.customerCount; i++) {
         bin_generator::customer customerData = generateCustomer(headerRawData);
-        char* customerBytes = core::toBytes(&customerData, sizeof(bin_generator::customer));
-        size_t customerSize = sizeof(bin_generator::customer);
+        char* customerBytes = core::toBytes(&customerData, bin_generator::CUSTOMER_SIZE);
 
-        memcpy(byteData + index, customerBytes, customerSize);
+        memcpy(byteData + index, customerBytes, bin_generator::CUSTOMER_SIZE);
 
         delete[] customerBytes;
-        index += customerSize;
+        index += bin_generator::CUSTOMER_SIZE;
     }
 
     return byteData;
 }
 
 size_t bin_generator::calculateSize(bin_generator::header headerRawData) {
-    size_t size = sizeof(bin_generator::header) + (headerRawData.customerCount * sizeof(bin_generator::customer));
+    size_t size = bin_generator::HEADER_SIZE + (headerRawData.customerCount * bin_generator::CUSTOMER_SIZE);
     return size;
 }
